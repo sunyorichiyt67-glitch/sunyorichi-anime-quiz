@@ -1,40 +1,186 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>SunYorichi Anime Quiz</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SunYorichi - Anime Quiz</title>
+
 <style>
 body{
-background:#111;
+margin:0;
+font-family:Arial,sans-serif;
+background:#0d0d0d;
 color:white;
-font-family:Arial;
 text-align:center;
-padding:40px;
 }
+
+header{
+background:#1b1b1b;
+padding:20px;
+box-shadow:0 0 15px #ff0055;
+}
+
 h1{
 color:#ff0055;
 }
+
+.quiz{
+max-width:600px;
+margin:30px auto;
+padding:20px;
+background:#1e1e1e;
+border-radius:15px;
+}
+
 button{
-padding:12px 20px;
-margin:10px;
-font-size:18px;
+display:block;
+width:100%;
+padding:12px;
+margin:10px 0;
+font-size:16px;
 background:#ff0055;
 color:white;
 border:none;
 border-radius:8px;
+cursor:pointer;
+}
+
+button:hover{
+background:#00bfff;
+}
+
+#next{
+display:none;
+background:#00bfff;
+}
+
+#score{
+margin-top:20px;
+font-size:20px;
+color:#00ff99;
 }
 </style>
+
 </head>
+
 <body>
 
+<header>
 <h1>🔥 SunYorichi Anime Quiz 🔥</h1>
+<p>Can You Become Anime King? 👑</p>
+</header>
 
-<h2>Who is the Strongest Sorcerer?</h2>
+<div class="quiz">
 
-<button onclick="alert('✅ Correct! Gojo Satoru')">Gojo</button>
-<button onclick="alert('❌ Wrong!')">Naruto</button>
-<button onclick="alert('❌ Wrong!')">Luffy</button>
+<h2 id="question"></h2>
 
-<p>Made by <b>SunYorichi</b></p>
+<div id="answers"></div>
+
+<button id="next" onclick="nextQuestion()">Next Question ➜</button>
+
+<h2 id="score"></h2>
+
+</div>
+
+<script>
+
+const quiz=[
+{
+q:"Who is the strongest sorcerer?",
+a:["Gojo","Naruto","Luffy","Ichigo"],
+c:0
+},
+{
+q:"Who wants to become Hokage?",
+a:["Sasuke","Naruto","Gojo","Tanjiro"],
+c:1
+},
+{
+q:"Who is the captain of Straw Hat Pirates?",
+a:["Zoro","Sanji","Luffy","Law"],
+c:2
+},
+{
+q:"Who is the main character of Solo Leveling?",
+a:["Jin Woo","Gojo","Levi","Goku"],
+c:0
+},
+{
+q:"Tanjiro belongs to which anime?",
+a:["Bleach","Demon Slayer","JJK","AOT"],
+c:1
+}
+];
+
+let current=0;
+let score=0;
+
+function loadQuestion(){
+
+document.getElementById("next").style.display="none";
+
+document.getElementById("question").innerHTML=(current+1)+". "+quiz[current].q;
+
+let html="";
+
+quiz[current].a.forEach((ans,index)=>{
+
+html+=`<button onclick="check(${index})">${ans}</button>`;
+
+});
+
+document.getElementById("answers").innerHTML=html;
+
+}
+
+function check(index){
+
+if(index===quiz[current].c){
+
+score++;
+
+}
+
+document.getElementById("next").style.display="block";
+
+let btn=document.querySelectorAll("#answers button");
+
+btn.forEach(b=>b.disabled=true);
+
+}
+
+function nextQuestion(){
+
+current++;
+
+if(current<quiz.length){
+
+loadQuestion();
+
+}else{
+
+document.querySelector(".quiz").innerHTML=
+"<h1>Quiz Finished 🎉</h1><h2>Your Score : "+score+"/5</h2><h3>"+rank()+"</h3>";
+
+}
+
+}
+
+function rank(){
+
+if(score==5)return "👑 Anime God";
+
+if(score>=4)return "🔥 Otaku";
+
+if(score>=2)return "😎 Weeb";
+
+return "💀 NPC";
+
+}
+
+loadQuestion();
+
+</script>
 
 </body>
 </html>
